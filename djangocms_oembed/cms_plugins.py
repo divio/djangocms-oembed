@@ -12,8 +12,8 @@ class CMSOembedVideoPlugin(CMSPluginBase):
     admin_preview = False
     text_enabled = True
     fieldsets = (
-        (None, {'fields': ('oembed_url', ('width', 'height',), ('autoplay', 'loop', 'show_related', ),)}),
-        ('advanced', {'fields': ('type', 'provider', 'html', 'data')}),
+        (None, {'fields': ('oembed_url', ('width', 'height',), 'autoplay', 'loop', 'show_related',)}),
+        ('advanced', {'fields': ('type', 'provider', 'html', 'data'), 'classes': ['collapse']}),
     )
     readonly_fields = ('type', 'provider', 'html', 'data',)
 

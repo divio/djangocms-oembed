@@ -13,6 +13,7 @@ setup(
     install_requires = (
         'Django>=1.4',
         'django-cms',
+        'pyquery',
         'micawber',
     ),
     include_package_data=True,
