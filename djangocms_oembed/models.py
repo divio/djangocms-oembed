@@ -41,8 +41,8 @@ class OembedVideoPlugin(CMSPlugin):
         if not data['type'] == 'video':
             raise ValidationError('This must be an url for a video, not %(type)s.' % {'type': data['type']},)
         self.type = data['type']
-        if 'provider' in data:
-            self.provider = data['provider']
+        if 'provider_name' in data:
+            self.provider = data['provider_name']
         self.html = data['html']
         self.data = data
 
