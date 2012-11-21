@@ -27,6 +27,9 @@ class OembedVideoPlugin(CMSPlugin):
     data = models.TextField(blank=True, default='')
     html = models.TextField(blank=True, default='')
 
+    def __unicode__(self):
+        return u"%s" % self.provider
+
     def clean(self):
         extra = {}
         if self.width:
