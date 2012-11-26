@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from cms.models import CMSPlugin
-import pprint
 import urllib
 import urlparse
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-import micawber
 from micawber.exceptions import ProviderNotFoundException, ProviderException
 from pyquery import PyQuery
+from .oembed_providers import bootstrap
 
-providers = micawber.bootstrap_basic()
+
+providers = bootstrap()
 
 
 class OembedVideoPlugin(CMSPlugin):
