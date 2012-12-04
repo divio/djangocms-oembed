@@ -4,6 +4,7 @@ import urllib
 import urlparse
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from micawber.exceptions import ProviderNotFoundException, ProviderException
 from pyquery import PyQuery
@@ -55,26 +56,41 @@ class OembedVideoPlugin(CMSPlugin):
         html = data.get('html', '')
         if 'provider_name' in data and self.provider in ['YouTube', 'Vimeo']:
             # dirty special handling of youtube and vimeo.
-            # they ignore these parameters over oembed... so we hack them into the iframe url.
+            # they ignore these parameters over oembed... so we use our own template to render them.
             iframe_html = PyQuery(html)
             url = iframe_html.attr('src')
             params = {
                 'autoplay': int(self.autoplay),
                 'loop': int(self.loop),
                 'rel': int(self.show_related),
-                'showinfo': 0  # YouTube
+                'showinfo': 0,  # YouTube
+                'hd': 1,  # YouTube
             }
             url_parts = list(urlparse.urlparse(url))
             query = dict(urlparse.parse_qsl(url_parts[4]))
             query.update(params)
             url_parts[4] = urllib.urlencode(query)
-            new_url = urlparse.urlunparse(url_parts)
-            # for some reason this does not work with just an iframe node. And it also urlescapes the src url again
-            #iframe_html.attr['src'] = new_url
-            #new_html = iframe_html.html(method='html')
-            # quick and dirty
-            new_html = html.replace(url, new_url)
-            html = new_html
+            new_url = mark_safe(urlparse.urlunparse(url_parts))
+            aspect_ratio = float(data.get('width')) / float(data.get('height'))
+            if self.width and not self.height:
+                width = self.width
+                height = int(float(self.width) / aspect_ratio)
+            elif self.height and not self.width:
+                height = self.height
+                width = int(float(self.height) * aspect_ratio)
+            elif self.width and self.height:
+                width = self.width
+                height = self.height
+            else:
+                width = data.get('width')
+                height = data.get('height')
+            context = {
+                'url': new_url,
+                'width': width,
+                'height': height,
+            }
+            from django.template.loader import render_to_string
+            html = render_to_string('djangocms_oembed/plugins/video_iframe.html', context)
         self.html = html
         self.data = data
 
