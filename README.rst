@@ -9,3 +9,5 @@ So there is some special handling for YouTube and Vimeo embeds:
 
 * looping for Vimeo
 * no related videos at the end for YouTube
+
+For responsive sites, it is recommended to use something like http://fitvidsjs.com/
