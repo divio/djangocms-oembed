@@ -1,6 +1,12 @@
 djangocms-oembed
 ================
 
+0.4.1 (2012-12-05)
+------------------
+
+* adds a better base template for responsive sites
+
+
 0.4 (2012-12-04)
 ----------------
 
