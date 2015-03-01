@@ -7,7 +7,10 @@ def bootstrap(cache=None):
     pr = bootstrap_basic(cache=cache)
     # add https support for vimeo and youtube
     pr.register('https://vimeo.com/\S*', Provider('https://vimeo.com/api/oembed.json'))
-    pr.unregister('https?://(\S*.)?youtu(\.be/|be\.com/watch)\S+')
+    try:
+        pr.unregister('https?://(\S*.)?youtu(\.be/|be\.com/watch)\S+')
+    except KeyError:  # if not registered
+        pass
     pr.register('https?://(\S*.)?youtu(\.be/|be\.com/watch)\S+', Provider('https://www.youtube.com/oembed?scheme=https'))
     return pr
 
